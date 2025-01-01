@@ -2,6 +2,6 @@ name: '${project.name}'
 version: '${project.version}'
 main: com.ggzzll.skindefault.SkinDefault
 api-version: 1.13
-author: Mortal
+authors: [ "Mortal", "PuddingKC" ]
 description: "一个能设置玩家默认皮肤的插件"
 depend: [ "SkinsRestorer" ]
