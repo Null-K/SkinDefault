@@ -3,7 +3,6 @@ package com.ggzzll.skindefault;
 import net.skinsrestorer.api.SkinsRestorer;
 import net.skinsrestorer.api.SkinsRestorerProvider;
 import net.skinsrestorer.api.property.InputDataResult;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -12,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 
 public final class SkinDefault extends JavaPlugin implements Listener {
 
@@ -28,12 +28,12 @@ public final class SkinDefault extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
+        UUID uuid = event.getPlayer().getUniqueId();
 
-        if (skinsRestorerAPI.getPlayerStorage().getSkinOfPlayer(player.getUniqueId()).isEmpty()){
+        if (skinsRestorerAPI.getPlayerStorage().getSkinOfPlayer(uuid).isEmpty()){
             Optional<InputDataResult> defaultSkin = skinsRestorerAPI.getSkinStorage().findSkinData(skinList.get(new Random().nextInt(skinList.size())));
             if (defaultSkin.isEmpty()) { return; }
-            skinsRestorerAPI.getPlayerStorage().setSkinIdOfPlayer(player.getUniqueId(), defaultSkin.get().getIdentifier());
+            skinsRestorerAPI.getPlayerStorage().setSkinIdOfPlayer(uuid, defaultSkin.get().getIdentifier());
         }
     }
 }
