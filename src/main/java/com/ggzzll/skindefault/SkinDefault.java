@@ -9,16 +9,20 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public final class SkinDefault extends JavaPlugin implements Listener {
 
-    private static SkinsRestorer SkinsRestorerAPI;
+    private static SkinsRestorer skinsRestorerAPI;
+    private List<String> skinList;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        SkinsRestorerAPI = SkinsRestorerProvider.get();
+        skinsRestorerAPI = SkinsRestorerProvider.get();
+        skinList = getConfig().getStringList("SkinDefault");
         getServer().getPluginManager().registerEvents(this, this);
     }
 
@@ -26,10 +30,10 @@ public final class SkinDefault extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (SkinsRestorerAPI.getPlayerStorage().getSkinOfPlayer(player.getUniqueId()).isEmpty()){
-            Optional<InputDataResult> SteveSkin = SkinsRestorerAPI.getSkinStorage().findSkinData(getConfig().getString("SkinDefault"));
-            if (SteveSkin.isEmpty()) { return; }
-            SkinsRestorerAPI.getPlayerStorage().setSkinIdOfPlayer(player.getUniqueId(), SteveSkin.get().getIdentifier());
+        if (skinsRestorerAPI.getPlayerStorage().getSkinOfPlayer(player.getUniqueId()).isEmpty()){
+            Optional<InputDataResult> defaultSkin = skinsRestorerAPI.getSkinStorage().findSkinData(skinList.get(new Random().nextInt(skinList.size())));
+            if (defaultSkin.isEmpty()) { return; }
+            skinsRestorerAPI.getPlayerStorage().setSkinIdOfPlayer(player.getUniqueId(), defaultSkin.get().getIdentifier());
         }
     }
 }
